@@ -1,10 +1,10 @@
 import React from "react";
 
-import { range, sample } from "../../utils";
+import { sample } from "../../utils";
 import { WORDS } from "../../data";
 import GuessInput from "../GuessInput";
 import GuessResult from "../GuessResult";
-import { NUM_OF_GUESSES_ALLOWED } from "../../constants";
+// import { checkGuess } from "../../game-helpers";
 
 // Pick a random word on every pageload.
 const answer = sample(WORDS);
@@ -12,22 +12,17 @@ const answer = sample(WORDS);
 console.info({ answer });
 
 function Game() {
-  const [guessesList, setGuessesList] = React.useState(
-    range(NUM_OF_GUESSES_ALLOWED)
-  );
-  const [nextGuessIndex, setNextGuessIndex] = React.useState(0);
+  const [guessesList, setGuessesList] = React.useState([]);
 
-  function addGuess(newGuess) {
-    if (nextGuessIndex < 6) {
-      const nextGuessesList = [...guessesList];
-      nextGuessesList[nextGuessIndex] = newGuess;
-      setGuessesList(nextGuessesList);
-      setNextGuessIndex(nextGuessIndex + 1);
-    }
+  function addGuess(tentativeGuess) {
+    if (guessesList.length >= 6) return;
+
+    const nextGuessesList = [...guessesList, tentativeGuess];
+    setGuessesList(nextGuessesList);
   }
   return (
     <>
-      <GuessResult guessesList={guessesList} />
+      <GuessResult guesses={guessesList} answer={answer} />
       <GuessInput addGuess={addGuess} />
     </>
   );
