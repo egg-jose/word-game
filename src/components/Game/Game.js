@@ -4,9 +4,9 @@ import { sample } from "../../utils";
 import { WORDS } from "../../data";
 import GuessInput from "../GuessInput";
 import GuessResult from "../GuessResult";
-import GameOverBanner from "../GameOverBanner";
 import { NUM_OF_GUESSES_ALLOWED } from "../../constants";
-// import { checkGuess } from "../../game-helpers";
+import HappyBanner from "../HappyBanner/HappyBanner";
+import SadBanner from "../SadBanner/SadBanner";
 
 // Pick a random word on every pageload.
 const answer = sample(WORDS);
@@ -32,15 +32,12 @@ function Game() {
 
   return (
     <>
-      {gameStatus !== "playing" && (
-        <GameOverBanner
-          gameStatus={gameStatus}
-          numOfGuesses={guessesList.length}
-          answer={answer}
-        />
-      )}
       <GuessResult guesses={guessesList} answer={answer} />
       <GuessInput addGuess={addGuess} disabled={gameStatus !== "playing"} />
+      {gameStatus === "won" && (
+        <HappyBanner numOfGuesses={guessesList.length} />
+      )}
+      {gameStatus === "lost" && <SadBanner answer={answer} />}
     </>
   );
 }
